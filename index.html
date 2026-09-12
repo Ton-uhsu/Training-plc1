@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Greenhouse One — Smart Farm Monitor</title>
+  <style>
+    :root {
+      --canvas: #edf2ef;
+      --surface: #ffffff;
+      --surface-soft: #f6f8f6;
+      --ink: #172421;
+      --muted: #66746f;
+      --line: #d6dfda;
+      --forest: #183f35;
+      --leaf: #2f745e;
+      --mint: #d9eee5;
+      --blue: #2e688a;
+      --amber: #b96d13;
+      --amber-soft: #fff0d8;
+      --red: #b93636;
+      --red-soft: #fde8e6;
+      --green: #287454;
+      --green-soft: #e1f2e9;
+      --radius: 8px;
+      --shadow: 0 12px 32px rgba(19, 46, 38, 0.08);
+      --body: "Leelawadee UI", Tahoma, sans-serif;
+      --data: "Cascadia Mono", "Segoe UI Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { min-width: 320px; background: var(--canvas); }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(24, 63, 53, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 63, 53, 0.025) 1px, transparent 1px),
+        var(--canvas);
+      background-size: 28px 28px;
+      font-family: var(--body);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid rgba(46, 104, 138, 0.28);
+      outline-offset: 2px;
+    }
+
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 224px minmax(0, 1fr); }
+    .rail {
+      background: var(--forest);
+      color: #eef8f3;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 5;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 8px 26px; }
+    .brand-mark {
+      width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.32);
+      display: grid; place-items: center; border-radius: 50%; position: relative;
+    }
+    .brand-mark::before {
+      content: ""; width: 15px; height: 20px; border-radius: 100% 0 100% 0;
+      background: #8bc9a5; transform: rotate(-20deg);
+    }
+    .brand strong { display: block; letter-spacing: .04em; font-size: 14px; }
+    .brand small { color: #a9c2ba; font-size: 11px; letter-spacing: .08em; }
+    .rail-label { margin: 10px 10px 8px; color: #7fa399; font: 10px var(--data); letter-spacing: .14em; text-transform: uppercase; }
+    .nav-item {
+      width: 100%; border: 0; background: transparent; color: #bed0ca;
+      padding: 11px 12px; display: flex; align-items: center; gap: 11px; text-align: left;
+      border-left: 2px solid transparent;
+    }
+    .nav-item::before { content: ""; width: 7px; height: 7px; border: 1px solid currentColor; transform: rotate(45deg); }
+    .nav-item.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: #8bc9a5; }
+    .nav-item[disabled] { cursor: default; opacity: .7; }
+    .rail-foot { margin-top: auto; padding: 16px 10px 4px; border-top: 1px solid rgba(255,255,255,.12); }
+    .online { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .online::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #7ed6a1; box-shadow: 0 0 0 4px rgba(126,214,161,.13); }
+    .rail-foot small { color: #8eada4; font: 10px var(--data); }
+
+    main { min-width: 0; padding: 24px clamp(18px, 3vw, 42px) 40px; }
+    .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
+    .eyebrow { color: var(--leaf); font: 700 11px var(--data); letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 3px 0 0; font-size: clamp(25px, 3vw, 38px); line-height: 1.15; letter-spacing: -.035em; }
+    .updated { text-align: right; color: var(--muted); font-size: 12px; }
+    .updated strong { display: block; color: var(--ink); font: 600 13px var(--data); margin-top: 3px; }
+
+    .incident-strip {
+      color: #fff; background: var(--red); display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 15px; align-items: center; padding: 14px 16px; border-radius: var(--radius); box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+    .incident-code { font: 700 12px var(--data); border: 1px solid rgba(255,255,255,.45); padding: 5px 7px; }
+    .incident-strip strong { display: block; font-size: 16px; }
+    .incident-strip span { font-size: 12px; color: #ffe8e6; }
+    .light-button { border: 1px solid rgba(255,255,255,.62); background: #fff; color: #8b2424; padding: 8px 13px; border-radius: 5px; font-weight: 700; }
+
+    .metric-band {
+      display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface);
+      border: 1px solid var(--line); margin-bottom: 14px;
+    }
+    .metric { padding: 17px 18px; border-right: 1px solid var(--line); min-width: 0; }
+    .metric:last-child { border-right: 0; }
+    .metric-label { color: var(--muted); font-size: 12px; }
+    .metric-value { margin-top: 3px; display: flex; align-items: baseline; gap: 6px; font: 700 27px var(--data); }
+    .metric-value small { font: 12px var(--body); color: var(--muted); }
+    .metric-value.danger { color: var(--red); }
+    .metric-value.warning { color: var(--amber); }
+
+    .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(310px, .75fr); gap: 14px; align-items: start; }
+    .stack { display: grid; gap: 14px; min-width: 0; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 7px 22px rgba(19,46,38,.045); min-width: 0; }
+    .panel-head { padding: 16px 18px 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { margin: 0; font-size: 16px; letter-spacing: -.01em; }
+    .panel-head p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+    .micro-label { color: var(--muted); font: 10px var(--data); letter-spacing: .08em; }
+
+    .flow { padding: 20px 18px 18px; overflow-x: auto; }
+    .flow-track { min-width: 620px; display: grid; grid-template-columns: repeat(4, 1fr); position: relative; gap: 18px; }
+    .flow-track::before { content: ""; position: absolute; left: 10%; right: 10%; top: 31px; height: 3px; background: linear-gradient(90deg, var(--blue) 0 48%, var(--red) 48% 65%, #a9b8b3 65%); }
+    .flow-node { position: relative; text-align: center; z-index: 1; }
+    .node-dot { width: 64px; height: 64px; margin: 0 auto 9px; background: var(--surface); border: 2px solid var(--green); border-radius: 50%; display: grid; place-items: center; font: 700 12px var(--data); }
+    .flow-node.fault .node-dot { border-color: var(--red); color: var(--red); box-shadow: 0 0 0 7px var(--red-soft); }
+    .flow-node.muted .node-dot { border-color: #9aaba5; color: #6f7f7a; }
+    .flow-node strong { display: block; font-size: 13px; }
+    .node-state { display: inline-flex; align-items: center; gap: 5px; margin-top: 2px; font-size: 11px; color: var(--green); }
+    .fault .node-state { color: var(--red); font-weight: 700; }
+    .muted .node-state { color: var(--muted); }
+
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 7px; }
+    .filter-button { border: 1px solid var(--line); background: var(--surface); color: var(--muted); padding: 6px 10px; border-radius: 5px; font-size: 12px; }
+    .filter-button.active { border-color: var(--forest); background: var(--forest); color: #fff; }
+    .device-table { width: 100%; border-collapse: collapse; }
+    .scroll-area { overflow-x: auto; }
+    .device-table th { padding: 9px 14px; background: var(--surface-soft); color: var(--muted); text-align: left; font: 10px var(--data); letter-spacing: .08em; text-transform: uppercase; }
+    .device-table td { padding: 12px 14px; border-top: 1px solid var(--line); vertical-align: middle; }
+    .device-table th:last-child, .device-table td:last-child { text-align: right; }
+    .device-name { font-weight: 700; }
+    .device-id { color: var(--muted); font: 10px var(--data); margin-top: 2px; }
+    .reading { font: 600 12px var(--data); }
+    .status { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 99px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .status.normal { color: var(--green); background: var(--green-soft); }
+    .status.warning { color: #95560c; background: var(--amber-soft); }
+    .status.critical { color: var(--red); background: var(--red-soft); }
+
+    .alert-list { padding: 8px 12px 12px; display: grid; gap: 8px; }
+    .alert { border-left: 3px solid var(--amber); background: #fffbf4; padding: 12px; }
+    .alert.critical { border-left-color: var(--red); background: #fff8f7; }
+    .alert-top { display: flex; justify-content: space-between; gap: 10px; }
+    .alert strong { font-size: 13px; }
+    .alert time { color: var(--muted); font: 10px var(--data); white-space: nowrap; }
+    .alert p { color: var(--muted); font-size: 12px; margin: 4px 0 10px; }
+    .alert-actions { display: flex; align-items: center; gap: 7px; }
+    .action-button { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 4px; padding: 5px 9px; font-size: 11px; font-weight: 700; }
+    .action-button.primary { border-color: var(--forest); background: var(--forest); color: #fff; }
+    .acknowledged { display: none; color: var(--green); font-size: 11px; font-weight: 700; }
+    .alert.is-acknowledged { opacity: .66; }
+    .alert.is-acknowledged .acknowledged { display: inline; }
+    .alert.is-acknowledged .ack-button { display: none; }
+
+    .env-grid { padding: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .env-card { border: 1px solid var(--line); padding: 12px; min-width: 0; }
+    .env-card .label { color: var(--muted); font-size: 11px; }
+    .env-card .value { font: 700 21px var(--data); margin: 3px 0 6px; }
+    .range { height: 4px; background: #e4ebe7; overflow: hidden; }
+    .range span { display: block; height: 100%; background: var(--leaf); }
+    .range.temperature span { width: 68%; }
+    .range.humidity span { width: 64%; }
+    .range.ph span { width: 58%; }
+    .range.ec span { width: 86%; }
+    .range.warning span { background: var(--amber); }
+    .env-note { margin: 0 14px 14px; padding: 10px 11px; background: var(--amber-soft); color: #7a4a12; font-size: 11px; border-left: 2px solid var(--amber); }
+
+    .maintenance-summary { padding: 16px 18px 18px; }
+    .maintenance-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+    .maintenance-row:last-child { border-bottom: 0; }
+    .maintenance-date { font: 700 11px var(--data); color: var(--leaf); }
+    .maintenance-row strong { display: block; font-size: 12px; }
+    .maintenance-row small { color: var(--muted); }
+
+    .view { display: none; }
+    .view.active { display: block; }
+    .view-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 14px; }
+    .view-intro h2 { margin: 0; font-size: 20px; letter-spacing: -.02em; }
+    .view-intro p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .period-picker { display: flex; gap: 6px; padding: 4px; background: #dfe7e2; border-radius: 6px; }
+    .period-button { border: 0; background: transparent; color: var(--muted); padding: 6px 11px; border-radius: 4px; font-size: 12px; font-weight: 700; }
+    .period-button.active { background: var(--surface); color: var(--forest); box-shadow: 0 1px 3px rgba(19,46,38,.13); }
+
+    .history-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(310px, .7fr); gap: 14px; align-items: start; }
+    .history-summary { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+    .history-kpi { padding: 15px 18px; border-right: 1px solid var(--line); }
+    .history-kpi:last-child { border-right: 0; }
+    .history-kpi span { display: block; color: var(--muted); font-size: 11px; }
+    .history-kpi strong { font: 700 20px var(--data); }
+    .chart-wrap { padding: 18px; }
+    .chart-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .chart-meta strong { font-size: 13px; }
+    .legend { display: flex; gap: 14px; color: var(--muted); font-size: 10px; }
+    .legend span::before { content: ""; display: inline-block; width: 13px; height: 2px; margin-right: 5px; vertical-align: middle; background: var(--leaf); }
+    .legend .alarm::before { background: var(--red); }
+    #history-chart { display: block; width: 100%; height: 270px; border: 1px solid var(--line); background: var(--surface-soft); }
+    .chart-grid-line { stroke: #dfe7e2; stroke-width: 1; }
+    .chart-line { fill: none; stroke: var(--leaf); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .chart-point { fill: var(--surface); stroke: var(--leaf); stroke-width: 2; }
+    .chart-label { fill: var(--muted); font: 10px var(--data); }
+    .history-list { padding: 8px 16px 15px; }
+    .history-event { display: grid; grid-template-columns: 54px 1fr auto; gap: 10px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .history-event:last-child { border-bottom: 0; }
+    .history-event time { color: var(--leaf); font: 700 10px var(--data); }
+    .history-event strong { display: block; font-size: 12px; }
+    .history-event small { color: var(--muted); }
+    .raw-log-panel { margin-top: 14px; }
+    .raw-log-toolbar { display: flex; align-items: center; gap: 7px; }
+    .raw-log-table { width: 100%; border-collapse: collapse; }
+    .raw-log-table th { padding: 10px 14px; background: var(--surface-soft); color: var(--muted); text-align: left; font: 10px var(--data); letter-spacing: .07em; text-transform: uppercase; }
+    .raw-log-table td { padding: 11px 14px; border-top: 1px solid var(--line); font-size: 12px; }
+    .raw-log-table td:nth-child(1), .raw-log-table td:nth-child(2), .raw-log-table td:nth-child(5) { font-family: var(--data); }
+    .raw-log-table td:nth-child(5) { font-weight: 700; }
+    .log-count { color: var(--muted); font-size: 11px; padding: 10px 14px; border-top: 1px solid var(--line); background: var(--surface-soft); }
+
+    .machine-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+    .machine-card { border: 1px solid var(--line); border-top: 3px solid var(--green); background: var(--surface); color: var(--ink); padding: 15px; text-align: left; border-radius: 5px; min-width: 0; }
+    .machine-card.warning { border-top-color: var(--amber); }
+    .machine-card.critical { border-top-color: var(--red); }
+    .machine-card.active { box-shadow: 0 0 0 2px var(--forest); }
+    .machine-card .machine-id { color: var(--muted); font: 10px var(--data); }
+    .machine-card h3 { margin: 5px 0 12px; font-size: 13px; min-height: 38px; }
+    .health-score { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .health-score strong { font: 700 26px var(--data); }
+    .health-score span { color: var(--muted); font-size: 10px; }
+    .health-bar { height: 5px; background: #e3eae6; margin-top: 7px; }
+    .health-bar span { display: block; height: 100%; background: var(--green); }
+    .health-61 .health-bar span { width: 61%; }
+    .health-89 .health-bar span { width: 89%; }
+    .health-94 .health-bar span { width: 94%; }
+    .health-96 .health-bar span { width: 96%; }
+    .critical .health-bar span { background: var(--red); }
+    .warning .health-bar span { background: var(--amber); }
+    .machine-detail { display: grid; grid-template-columns: minmax(0, 1fr) 300px; }
+    .machine-readings { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .machine-reading { padding: 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .machine-reading:nth-child(3n) { border-right: 0; }
+    .machine-reading span { display: block; color: var(--muted); font-size: 11px; }
+    .machine-reading strong { font: 700 17px var(--data); }
+    .recommendation { margin: 16px 18px 18px; padding: 12px 13px; background: var(--red-soft); border-left: 3px solid var(--red); }
+    .recommendation strong { display: block; color: var(--red); font-size: 12px; }
+    .recommendation p { margin: 3px 0 0; font-size: 11px; color: #6f3939; }
+    .recommendation.warning { background: var(--amber-soft); border-left-color: var(--amber); }
+    .recommendation.warning strong { color: var(--amber); }
+    .recommendation.normal { background: var(--green-soft); border-left-color: var(--green); }
+    .recommendation.normal strong { color: var(--green); }
+    .runtime-box { padding: 20px; border-left: 1px solid var(--line); background: var(--surface-soft); display: flex; flex-direction: column; justify-content: space-between; }
+    .runtime-box .big { font: 700 34px var(--data); }
+    .runtime-box p { color: var(--muted); font-size: 11px; margin: 4px 0 18px; }
+    .runtime-bars { height: 86px; display: flex; align-items: end; gap: 8px; }
+    .runtime-bars span { flex: 1; background: var(--leaf); min-height: 10px; }
+    .runtime-bars span:nth-child(1) { height: 76%; }
+    .runtime-bars span:nth-child(2) { height: 84%; }
+    .runtime-bars span:nth-child(3) { height: 72%; }
+    .runtime-bars span:nth-child(4) { height: 92%; }
+    .runtime-bars span:nth-child(5) { height: 88%; }
+    .runtime-bars span:nth-child(6) { height: 64%; }
+    .runtime-bars span:nth-child(7) { height: 80%; }
+
+    .maintenance-toolbar { display: flex; align-items: center; gap: 7px; }
+    .plan-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+    .plan-stat { padding: 16px 18px; border-right: 1px solid var(--line); }
+    .plan-stat:last-child { border-right: 0; }
+    .plan-stat span { display: block; color: var(--muted); font-size: 11px; }
+    .plan-stat strong { font: 700 20px var(--data); }
+    .plan-stat strong.danger { color: var(--red); }
+    .plan-list { padding: 8px 16px 16px; }
+    .plan-item { display: grid; grid-template-columns: 108px minmax(230px, 1.1fr) minmax(260px, 1.4fr) 120px; gap: 16px; align-items: center; padding: 15px 4px; border-bottom: 1px solid var(--line); }
+    .plan-item:last-child { border-bottom: 0; }
+    .plan-priority { font-size: 11px; font-weight: 700; }
+    .plan-priority.required { color: var(--red); }
+    .plan-priority.soon { color: var(--amber); }
+    .plan-item h3 { margin: 0; font-size: 13px; }
+    .plan-item small, .plan-reason { color: var(--muted); font-size: 11px; }
+    .plan-date { font: 700 11px var(--data); text-align: right; }
+    .plan-date small { display: block; font: 10px var(--body); }
+
+    dialog { width: min(480px, calc(100% - 30px)); padding: 0; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 25px 80px rgba(11,34,28,.3); color: var(--ink); }
+    dialog::backdrop { background: rgba(11, 34, 28, .58); }
+    .dialog-head { padding: 17px 19px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+    .dialog-head h2 { margin: 0; font-size: 17px; }
+    .icon-button { border: 0; background: transparent; color: var(--muted); font-size: 24px; line-height: 1; width: 34px; height: 34px; border-radius: 50%; }
+    .dialog-body { padding: 18px 19px; display: grid; gap: 13px; }
+    .field { display: grid; gap: 5px; }
+    .field label { font-size: 12px; font-weight: 700; }
+    .field select, .field textarea { width: 100%; border: 1px solid var(--line); background: #fff; padding: 9px 10px; border-radius: 5px; color: var(--ink); }
+    .dialog-foot { padding: 13px 19px; background: var(--surface-soft); display: flex; justify-content: flex-end; gap: 8px; }
+    .toast { position: fixed; right: 22px; bottom: 22px; z-index: 20; background: var(--forest); color: #fff; padding: 12px 15px; border-radius: 6px; box-shadow: var(--shadow); transform: translateY(120px); opacity: 0; transition: .22s ease; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 1050px) {
+      .shell { grid-template-columns: 76px minmax(0, 1fr); }
+      .rail { padding-inline: 11px; }
+      .brand { justify-content: center; padding-inline: 0; }
+      .brand > div:last-child, .rail-label, .nav-item span, .rail-foot small { display: none; }
+      .nav-item { justify-content: center; padding: 13px; }
+      .rail-foot { padding-inline: 0; display: flex; justify-content: center; }
+      .online span { display: none; }
+      .machine-grid { grid-template-columns: 1fr 1fr; }
+      .history-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 820px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .metric-band { grid-template-columns: 1fr 1fr; }
+      .metric:nth-child(2) { border-right: 0; }
+      .metric:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    }
+    @media (max-width: 620px) {
+      .shell { display: block; }
+      .rail { position: static; height: auto; padding: 12px 15px; flex-direction: row; align-items: center; }
+      .brand { padding: 0; }
+      .brand-mark { width: 32px; height: 32px; }
+      .rail nav, .rail-label, .rail-foot { display: none; }
+      main { padding: 18px 12px 30px; }
+      .topbar { align-items: flex-end; }
+      .updated span { display: none; }
+      .incident-strip { grid-template-columns: auto 1fr; }
+      .incident-strip .light-button { grid-column: 1 / -1; width: 100%; }
+      .metric { padding: 13px; }
+      .metric-value { font-size: 22px; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
+      .device-table th:nth-child(2), .device-table td:nth-child(2) { display: none; }
+      .device-table th, .device-table td { padding-inline: 10px; }
+      .env-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" aria-label="เมนูหลัก">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div><strong>GREENHOUSE ONE</strong><small>OPERATIONS MONITOR</small></div>
+      </div>
+      <div class="rail-label">ภาพรวม</div>
+      <nav>
+        <button class="nav-item active" data-view-target="overview-view" data-title="สถานะฟาร์มวันนี้" aria-current="page"><span>แดชบอร์ด</span></button>
+        <button class="nav-item" data-view-target="machine-view" data-title="สุขภาพเครื่องจักร"><span>สุขภาพเครื่องจักร</span></button>
+        <button class="nav-item" data-view-target="history-view" data-title="ข้อมูลย้อนหลัง"><span>ข้อมูลย้อนหลัง</span></button>
+        <button class="nav-item" data-view-target="maintenance-view" data-title="แผนซ่อมบำรุง"><span>แผนซ่อมบำรุง</span></button>
+      </nav>
+      <div class="rail-foot">
+        <div class="online"><span>Gateway เชื่อมต่อแล้ว</span></div>
+        <small>GW-01 · latency 42 ms</small>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">โรงเรือนกัญชาระบบปิด · ออกดอกวันที่ 32 · MONITOR ONLY</div>
+          <h1 id="page-title">สถานะฟาร์มวันนี้</h1>
+        </div>
+        <div class="updated"><span>ข้อมูลล่าสุด</span><strong id="live-clock">12 ก.ย. 69 · 14:32:18</strong></div>
+      </header>
+
+      <section class="view active" id="overview-view" aria-label="แดชบอร์ดภาพรวม">
+      <section class="incident-strip" aria-label="เหตุผิดปกติเร่งด่วน">
+        <div class="incident-code">P-02</div>
+        <div><strong>ปั๊มสารอาหารแรงดันต่ำกว่ากำหนด</strong><span>ตรวจพบต่อเนื่อง 12 นาที · ควรตรวจไส้กรองและทางดูด</span></div>
+        <button class="light-button report-button" data-device="ปั๊มสารอาหาร P-02">แจ้งซ่อม</button>
+      </section>
+
+      <section class="metric-band" aria-label="สรุปสถานะ">
+        <div class="metric"><div class="metric-label">สุขภาพระบบรวม</div><div class="metric-value warning">87<small>%</small></div></div>
+        <div class="metric"><div class="metric-label">อุปกรณ์ออนไลน์</div><div class="metric-value">8/8<small>ตัว</small></div></div>
+        <div class="metric"><div class="metric-label">ผิดปกติ</div><div class="metric-value danger">3<small>รายการ</small></div></div>
+        <div class="metric"><div class="metric-label">งานซ่อมที่เปิดอยู่</div><div class="metric-value">2<small>งาน</small></div></div>
+      </section>
+
+      <div class="dashboard-grid">
+        <div class="stack">
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>เส้นทางระบบน้ำและสารอาหาร</h2><p>เห็นจุดสะดุดของระบบหลักในมุมเดียว</p></div>
+              <div class="micro-label">LIVE FLOW</div>
+            </div>
+            <div class="flow">
+              <div class="flow-track">
+                <div class="flow-node"><div class="node-dot">68%</div><strong>ถังพักน้ำ</strong><span class="node-state">● ปกติ</span></div>
+                <div class="flow-node"><div class="node-dot">P-01</div><strong>ปั๊มน้ำหลัก</strong><span class="node-state">● ทำงาน</span></div>
+                <div class="flow-node fault"><div class="node-dot">P-02</div><strong>ปั๊มสารอาหาร</strong><span class="node-state">● แรงดันต่ำ</span></div>
+                <div class="flow-node muted"><div class="node-dot">24</div><strong>หัวจ่ายน้ำ</strong><span class="node-state">● รอตรวจสอบ</span></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>สถานะอุปกรณ์ทั้งหมด</h2><p>เรียงรายการที่ต้องตรวจสอบขึ้นก่อน</p></div>
+              <div class="filter-bar" aria-label="กรองรายการอุปกรณ์">
+                <button class="filter-button active" data-filter="all">ทั้งหมด</button>
+                <button class="filter-button" data-filter="fault">ดูเฉพาะผิดปกติ</button>
+                <button class="filter-button" data-filter="normal">ปกติ</button>
+              </div>
+            </div>
+            <div class="scroll-area">
+              <table class="device-table">
+                <thead><tr><th>อุปกรณ์</th><th>ค่าล่าสุด</th><th>อัปเดต</th><th>สถานะ</th></tr></thead>
+                <tbody>
+                  <tr data-device-row data-status="critical"><td><div class="device-name">ปั๊มสารอาหาร</div><div class="device-id">P-02 · ระบบจ่ายปุ๋ย</div></td><td class="reading">1.2 bar</td><td>10 วินาที</td><td><span class="status critical">วิกฤต</span></td></tr>
+                  <tr data-device-row data-status="warning"><td><div class="device-name">เซ็นเซอร์ความชื้นดิน</div><div class="device-id">SM-04 · แปลงกลาง</div></td><td class="reading">31%</td><td>18 วินาที</td><td><span class="status warning">เฝ้าระวัง</span></td></tr>
+                  <tr data-device-row data-status="warning"><td><div class="device-name">เซ็นเซอร์ EC</div><div class="device-id">EC-01 · ถังผสม</div></td><td class="reading">2.4 mS/cm</td><td>14 วินาที</td><td><span class="status warning">สูงกว่าช่วง</span></td></tr>
+                  <tr data-device-row data-status="normal"><td><div class="device-name">ปั๊มน้ำหลัก</div><div class="device-id">P-01 · ระบบน้ำ</div></td><td class="reading">2.8 bar</td><td>8 วินาที</td><td><span class="status normal">ทำงาน</span></td></tr>
+                  <tr data-device-row data-status="normal"><td><div class="device-name">เซ็นเซอร์อุณหภูมิ</div><div class="device-id">TMP-01 · กลางโรงเรือน</div></td><td class="reading">27.8 °C</td><td>12 วินาที</td><td><span class="status normal">ปกติ</span></td></tr>
+                  <tr data-device-row data-status="normal"><td><div class="device-name">เซ็นเซอร์ความชื้นอากาศ</div><div class="device-id">RH-01 · กลางโรงเรือน</div></td><td class="reading">64%</td><td>12 วินาที</td><td><span class="status normal">ปกติ</span></td></tr>
+                  <tr data-device-row data-status="normal"><td><div class="device-name">เซ็นเซอร์ pH</div><div class="device-id">PH-01 · ถังผสม</div></td><td class="reading">6.2 pH</td><td>15 วินาที</td><td><span class="status normal">ปกติ</span></td></tr>
+                  <tr data-device-row data-status="normal"><td><div class="device-name">พัดลมระบายอากาศ</div><div class="device-id">FAN-01 · ผนังทิศเหนือ</div></td><td class="reading">1,180 rpm</td><td>9 วินาที</td><td><span class="status normal">ทำงาน</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <aside class="stack">
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>ต้องดำเนินการ 3 รายการ</h2><p>เรียงตามความเร่งด่วน</p></div>
+            </div>
+            <div class="alert-list">
+              <article class="alert critical" data-alert-id="ALT-001">
+                <div class="alert-top"><strong>แรงดันปั๊ม P-02 ต่ำ</strong><time>14:20</time></div>
+                <p>ต่ำกว่าเกณฑ์ 1.8 bar ต่อเนื่อง 12 นาที</p>
+                <div class="alert-actions"><button class="action-button ack-button">รับทราบ</button><button class="action-button primary report-button" data-device="ปั๊มสารอาหาร P-02">แจ้งซ่อม</button><span class="acknowledged">รับทราบแล้ว</span></div>
+              </article>
+              <article class="alert" data-alert-id="ALT-002">
+                <div class="alert-top"><strong>ความชื้นดิน SM-04 ต่ำ</strong><time>14:14</time></div>
+                <p>ต่ำกว่าช่วงปกติ 35–55% ในการอ่าน 3 ครั้งล่าสุด</p>
+                <div class="alert-actions"><button class="action-button ack-button">รับทราบ</button><button class="action-button primary report-button" data-device="เซ็นเซอร์ความชื้นดิน SM-04">แจ้งซ่อม</button><span class="acknowledged">รับทราบแล้ว</span></div>
+              </article>
+              <article class="alert" data-alert-id="ALT-003">
+                <div class="alert-top"><strong>ค่า EC สูงกว่าช่วง</strong><time>13:58</time></div>
+                <p>ค่า 2.4 mS/cm สูงกว่าเป้าหมาย 1.6–2.2</p>
+                <div class="alert-actions"><button class="action-button ack-button">รับทราบ</button><button class="action-button primary report-button" data-device="เซ็นเซอร์ EC-01">แจ้งซ่อม</button><span class="acknowledged">รับทราบแล้ว</span></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>สภาพแวดล้อม</h2><p>ค่ากลางของโรงเรือน</p></div><div class="micro-label">30 SEC</div></div>
+            <div class="env-grid">
+              <div class="env-card"><div class="label">อุณหภูมิ</div><div class="value">27.8°C</div><div class="range temperature"><span></span></div></div>
+              <div class="env-card"><div class="label">ความชื้นอากาศ</div><div class="value">64%</div><div class="range humidity"><span></span></div></div>
+              <div class="env-card"><div class="label">pH น้ำ</div><div class="value">6.2</div><div class="range ph"><span></span></div></div>
+              <div class="env-card"><div class="label">EC</div><div class="value">2.4</div><div class="range warning ec"><span></span></div></div>
+            </div>
+            <p class="env-note">EC สูงกว่าเป้าหมายเล็กน้อย — ติดตามร่วมกับปั๊มสารอาหาร P-02</p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>กำหนดบำรุงรักษา</h2><p>รายการใกล้ถึงกำหนด</p></div></div>
+            <div class="maintenance-summary">
+              <div class="maintenance-row"><div class="maintenance-date">14 ก.ย.</div><div><strong>ล้างไส้กรองระบบน้ำ</strong><small>เหลือ 2 วัน</small></div><span class="status warning">ใกล้ถึง</span></div>
+              <div class="maintenance-row"><div class="maintenance-date">20 ก.ย.</div><div><strong>สอบเทียบเซ็นเซอร์ pH</strong><small>เหลือ 8 วัน</small></div><span class="status normal">ตามแผน</span></div>
+            </div>
+          </section>
+        </aside>
+      </div>
+      </section>
+
+      <section class="view" id="machine-view" aria-label="สุขภาพเครื่องจักร">
+        <div class="view-intro">
+          <div><h2>เครื่องจักรหลัก 4 ตัว</h2><p>เปรียบเทียบสภาพการทำงานและเลือกดูรายละเอียดรายเครื่อง</p></div>
+          <span class="status warning">1 เครื่องต้องตรวจ</span>
+        </div>
+        <div class="machine-grid">
+          <button class="machine-card critical active health-61" data-machine-card data-machine="p02" aria-label="มอเตอร์ปั๊มสารอาหาร P-02">
+            <span class="machine-id">MTR-P02</span><h3>มอเตอร์ปั๊มสารอาหาร P-02</h3>
+            <div class="health-score"><strong>61%</strong><span>ต้องตรวจ</span></div><div class="health-bar"><span></span></div>
+          </button>
+          <button class="machine-card health-94" data-machine-card data-machine="p01" aria-label="มอเตอร์ปั๊มน้ำหลัก P-01">
+            <span class="machine-id">MTR-P01</span><h3>มอเตอร์ปั๊มน้ำหลัก P-01</h3>
+            <div class="health-score"><strong>94%</strong><span>ปกติ</span></div><div class="health-bar"><span></span></div>
+          </button>
+          <button class="machine-card warning health-89" data-machine-card data-machine="fan01" aria-label="มอเตอร์พัดลม FAN-01">
+            <span class="machine-id">MTR-FAN01</span><h3>มอเตอร์พัดลม FAN-01</h3>
+            <div class="health-score"><strong>89%</strong><span>ติดตาม</span></div><div class="health-bar"><span></span></div>
+          </button>
+          <button class="machine-card health-96" data-machine-card data-machine="fan02" aria-label="มอเตอร์หมุนเวียน FAN-02">
+            <span class="machine-id">MTR-FAN02</span><h3>มอเตอร์หมุนเวียน FAN-02</h3>
+            <div class="health-score"><strong>96%</strong><span>ปกติ</span></div><div class="health-bar"><span></span></div>
+          </button>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head"><div><h2 id="machine-detail-title">มอเตอร์ปั๊มสารอาหาร P-02</h2><p id="machine-detail-id">MTR-P02 · อัปเดต 10 วินาทีที่แล้ว</p></div><span class="status critical" id="machine-detail-status">ควรตรวจสอบ</span></div>
+          <div class="machine-detail">
+            <div>
+              <div class="machine-readings">
+                <div class="machine-reading"><span>กระแสมอเตอร์</span><strong id="machine-current">8.7 A</strong></div>
+                <div class="machine-reading"><span>แรงสั่นสะเทือน</span><strong id="machine-vibration">6.8 mm/s</strong></div>
+                <div class="machine-reading"><span>อุณหภูมิลูกปืน</span><strong id="machine-bearing">อุณหภูมิลูกปืน 71°C</strong></div>
+                <div class="machine-reading"><span>ความเร็ว</span><strong id="machine-rpm">1,420 rpm</strong></div>
+                <div class="machine-reading"><span>แรงดันขาออก</span><strong id="machine-pressure">1.2 bar</strong></div>
+                <div class="machine-reading"><span>ชั่วโมงเดินเครื่อง</span><strong id="machine-hours">4,286 h</strong></div>
+              </div>
+              <div class="recommendation" id="machine-recommendation"><strong>แนะนำให้ตรวจภายใน 2 ชั่วโมง</strong><p>แรงสั่นสะเทือนและอุณหภูมิลูกปืนเพิ่มพร้อมกัน ควรตรวจแนวเพลา ลูกปืน และการอุดตันทางดูด</p></div>
+            </div>
+            <div class="runtime-box">
+              <div><span class="micro-label">RUNTIME · 7 DAYS</span><div class="big">83.4 h</div><p>ทำงานเฉลี่ย 11.9 ชั่วโมงต่อวัน</p></div>
+              <div class="runtime-bars" aria-label="ชั่วโมงทำงานย้อนหลัง 7 วัน"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="history-view" aria-label="ข้อมูลย้อนหลัง">
+        <div class="view-intro">
+          <div><h2>ประวัติสุขภาพระบบ</h2><p>ดูแนวโน้มและเหตุผิดปกติย้อนหลังได้สูงสุดหนึ่งปี</p></div>
+          <div class="period-picker" aria-label="เลือกช่วงเวลา">
+            <button class="period-button" data-period="24h">24 ชม.</button>
+            <button class="period-button" data-period="7d">7 วัน</button>
+            <button class="period-button active" data-period="30d">30 วัน</button>
+            <button class="period-button" data-period="1y">1 ปี</button>
+          </div>
+        </div>
+        <div class="history-grid">
+          <section class="panel">
+            <div class="history-summary">
+              <div class="history-kpi"><span>ช่วงที่แสดง</span><strong id="history-range">ย้อนหลัง 30 วัน</strong></div>
+              <div class="history-kpi"><span>สุขภาพระบบ</span><strong id="history-health-summary">สุขภาพเฉลี่ย 89%</strong></div>
+              <div class="history-kpi"><span>เวลาหยุดเครื่อง</span><strong id="history-downtime">2.6 h</strong></div>
+            </div>
+            <div class="chart-wrap">
+              <div class="chart-meta"><strong>คะแนนสุขภาพเครื่องจักร</strong><div class="legend"><span>Health score</span><span class="alarm">จุดเกิด Alarm</span></div></div>
+              <svg id="history-chart" viewBox="0 0 760 270" role="img" aria-label="กราฟแนวโน้มสุขภาพเครื่องจักร"></svg>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>เหตุการณ์สำคัญ</h2><p>เหตุที่กระทบการเดินเครื่อง</p></div></div>
+            <div class="history-list">
+              <div class="history-event"><time>12 ก.ย.</time><div><strong>P-02 แรงดันต่ำ</strong><small>กำลังตรวจสอบ · 12 นาที</small></div><span class="status critical">วิกฤต</span></div>
+              <div class="history-event"><time>28 ส.ค.</time><div><strong>FAN-01 สั่นเกินช่วง</strong><small>แก้ไขแล้ว · หยุด 42 นาที</small></div><span class="status normal">ปิดงาน</span></div>
+              <div class="history-event"><time>03 ก.ค.</time><div><strong>สอบเทียบ EC-01</strong><small>บำรุงรักษาตามแผน</small></div><span class="status normal">สำเร็จ</span></div>
+              <div class="history-event"><time>19 พ.ค.</time><div><strong>P-01 กระแสเกิน</strong><small>แก้ไขแล้ว · หยุด 1.3 ชั่วโมง</small></div><span class="status normal">ปิดงาน</span></div>
+            </div>
+          </section>
+        </div>
+        <section class="panel raw-log-panel">
+          <div class="panel-head">
+            <div><h2>ข้อมูล Log ดิบ</h2><p id="raw-log-scope">ข้อมูลตัวอย่างจากย้อนหลัง 30 วัน</p></div>
+            <div class="raw-log-toolbar" aria-label="กรองข้อมูล Log">
+              <button class="filter-button active" data-log-filter="all">ทั้งหมด</button>
+              <button class="filter-button" data-log-filter="abnormal">เฉพาะผิดปกติ</button>
+              <button class="filter-button" data-log-filter="normal">ปกติ</button>
+            </div>
+          </div>
+          <div class="scroll-area">
+            <table class="raw-log-table">
+              <thead><tr><th>วันและเวลา</th><th>Asset ID</th><th>อุปกรณ์</th><th>ตัวแปร</th><th>ค่าดิบ</th><th>สถานะ</th></tr></thead>
+              <tbody id="raw-log-body"></tbody>
+            </table>
+          </div>
+          <div class="log-count" id="raw-log-count">แสดงข้อมูลตัวอย่าง 8 รายการ</div>
+        </section>
+      </section>
+
+      <section class="view" id="maintenance-view" aria-label="แผนซ่อมบำรุง">
+        <div class="view-intro">
+          <div><h2>แผนซ่อมบำรุงตามความจำเป็น</h2><p>รวมงานจากสภาพเครื่องจริง ชั่วโมงทำงาน และรอบบำรุงรักษา</p></div>
+          <div class="maintenance-toolbar" aria-label="กรองแผนซ่อม">
+            <button class="filter-button active" data-maintenance-filter="all">ทั้งหมด</button>
+            <button class="filter-button" data-maintenance-filter="required">เฉพาะจำเป็น</button>
+            <button class="filter-button" data-maintenance-filter="30d">ภายใน 30 วัน</button>
+          </div>
+        </div>
+        <section class="panel">
+          <div class="plan-stats">
+            <div class="plan-stat"><span>งานที่ต้องทำ</span><strong>5 งาน</strong></div>
+            <div class="plan-stat"><span>งานจำเป็น</span><strong class="danger">2 งาน</strong></div>
+            <div class="plan-stat"><span>เวลาหยุดเครื่องโดยประมาณ</span><strong>6.5 h</strong></div>
+          </div>
+          <div class="plan-list">
+            <article class="plan-item" data-maintenance-item data-necessity="required" data-window="now"><div class="plan-priority required">● จำเป็น · เร่งด่วน</div><div><h3>ตรวจมอเตอร์และลูกปืนปั๊ม P-02</h3><small>MTR-P02 · ระบบสารอาหาร</small></div><div class="plan-reason">แรงสั่นสะเทือน 6.8 mm/s และอุณหภูมิลูกปืน 71°C สูงขึ้นพร้อมกัน</div><div class="plan-date">วันนี้ · 16:30<small>หยุดเครื่อง 2 ชม.</small></div></article>
+            <article class="plan-item" data-maintenance-item data-necessity="required" data-window="30d"><div class="plan-priority required">● จำเป็น</div><div><h3>ล้างไส้กรองระบบน้ำ</h3><small>FLT-01 · ก่อนปั๊ม P-01</small></div><div class="plan-reason">แรงดันตกคร่อมถึง 82% ของเกณฑ์ และครบ 476 ชั่วโมงใช้งาน</div><div class="plan-date">14 ก.ย. 69<small>หยุดเครื่อง 1 ชม.</small></div></article>
+            <article class="plan-item" data-maintenance-item data-necessity="planned" data-window="30d"><div class="plan-priority soon">● ใกล้ถึงกำหนด</div><div><h3>สอบเทียบเซ็นเซอร์ pH</h3><small>PH-01 · ถังผสม</small></div><div class="plan-reason">ครบกำหนดสอบเทียบทุก 90 วัน ค่าปัจจุบันยังอยู่ในช่วงปกติ</div><div class="plan-date">20 ก.ย. 69<small>ไม่ต้องหยุดระบบ</small></div></article>
+            <article class="plan-item" data-maintenance-item data-necessity="planned" data-window="30d"><div class="plan-priority soon">● ตามรอบ</div><div><h3>ตรวจสายพานพัดลม FAN-01</h3><small>MTR-FAN01 · ระบายอากาศ</small></div><div class="plan-reason">เหลือ 64 ชั่วโมงก่อนครบช่วงตรวจ และแรงสั่นสะเทือนเริ่มเพิ่ม</div><div class="plan-date">28 ก.ย. 69<small>หยุดเครื่อง 1.5 ชม.</small></div></article>
+            <article class="plan-item" data-maintenance-item data-necessity="planned" data-window="later"><div class="plan-priority">● ตามแผน</div><div><h3>เปลี่ยนซีลปั๊มน้ำหลัก P-01</h3><small>MTR-P01 · ระบบน้ำ</small></div><div class="plan-reason">งานป้องกันตาม 5,000 ชั่วโมง ปัจจุบันใช้งาน 4,286 ชั่วโมง</div><div class="plan-date">15 พ.ย. 69<small>หยุดเครื่อง 2 ชม.</small></div></article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="maintenance-dialog" aria-labelledby="dialog-title">
+    <form method="dialog" id="maintenance-form">
+      <div class="dialog-head"><h2 id="dialog-title">สร้างรายการแจ้งซ่อม</h2><button class="icon-button" value="cancel" aria-label="ปิดหน้าต่าง">×</button></div>
+      <div class="dialog-body">
+        <div class="field"><label for="device">อุปกรณ์</label><select id="device" name="device"><option></option></select></div>
+        <div class="field"><label for="priority">ระดับความเร่งด่วน</label><select id="priority" name="priority"><option>เร่งด่วน — ภายใน 2 ชั่วโมง</option><option>วันนี้</option><option>ตามรอบบำรุงรักษา</option></select></div>
+        <div class="field"><label for="note">รายละเอียดเพิ่มเติม</label><textarea id="note" name="note" rows="3" placeholder="ระบุอาการหรือสิ่งที่ตรวจพบ"></textarea></div>
+      </div>
+      <div class="dialog-foot"><button class="action-button" value="cancel">ยกเลิก</button><button class="action-button primary" id="submit-maintenance" value="default">ยืนยันแจ้งซ่อม</button></div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite">บันทึกรายการแจ้งซ่อมแล้ว</div>
+
+  <script>
+    const navButtons = [...document.querySelectorAll('[data-view-target]')];
+    const views = [...document.querySelectorAll('.view')];
+    const pageTitle = document.getElementById('page-title');
+
+    navButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        navButtons.forEach((item) => {
+          const selected = item === button;
+          item.classList.toggle('active', selected);
+          selected ? item.setAttribute('aria-current', 'page') : item.removeAttribute('aria-current');
+        });
+        views.forEach((view) => view.classList.toggle('active', view.id === button.dataset.viewTarget));
+        pageTitle.textContent = button.dataset.title;
+      });
+    });
+
+    const historyData = {
+      '24h': { label: 'ย้อนหลัง 24 ชั่วโมง', health: 'สุขภาพเฉลี่ย 86%', downtime: '0.4 h', labels: ['00', '04', '08', '12', '16', '20', '24'], values: [92, 91, 90, 88, 84, 86, 87] },
+      '7d': { label: 'ย้อนหลัง 7 วัน', health: 'สุขภาพเฉลี่ย 90%', downtime: '1.2 h', labels: ['จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.', 'อา.'], values: [94, 93, 91, 92, 90, 88, 87] },
+      '30d': { label: 'ย้อนหลัง 30 วัน', health: 'สุขภาพเฉลี่ย 89%', downtime: '2.6 h', labels: ['14 ส.ค.', '18', '22', '26', '30', '3 ก.ย.', '7', '12'], values: [91, 93, 92, 90, 94, 91, 88, 87] },
+      '1y': { label: 'ย้อนหลัง 1 ปี', health: 'สุขภาพเฉลี่ย 92%', downtime: '9.4 h', labels: ['ต.ค.', 'พ.ย.', 'ธ.ค.', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.'], values: [95, 94, 96, 93, 92, 94, 91, 88, 93, 92, 90, 87] }
+    };
+
+    const svgNamespace = 'http://www.w3.org/2000/svg';
+    const historyChart = document.getElementById('history-chart');
+    const createSvg = (tag, attributes, textContent = '') => {
+      const element = document.createElementNS(svgNamespace, tag);
+      Object.entries(attributes).forEach(([name, value]) => element.setAttribute(name, value));
+      element.textContent = textContent;
+      return element;
+    };
+
+    const rawLogTimes = {
+      '24h': ['12 ก.ย. 69 · 15:27:10', '12 ก.ย. 69 · 15:26:40', '12 ก.ย. 69 · 15:26:10', '12 ก.ย. 69 · 15:25:40', '12 ก.ย. 69 · 15:25:10', '12 ก.ย. 69 · 15:24:40', '12 ก.ย. 69 · 15:24:10', '12 ก.ย. 69 · 15:23:40'],
+      '7d': ['12 ก.ย. 69 · 15:27', '11 ก.ย. 69 · 18:00', '10 ก.ย. 69 · 12:30', '9 ก.ย. 69 · 08:15', '8 ก.ย. 69 · 16:45', '7 ก.ย. 69 · 11:20', '6 ก.ย. 69 · 07:05', '5 ก.ย. 69 · 19:10'],
+      '30d': ['12 ก.ย. 69 · 15:27', '9 ก.ย. 69 · 10:18', '5 ก.ย. 69 · 14:05', '31 ส.ค. 69 · 09:42', '27 ส.ค. 69 · 17:30', '22 ส.ค. 69 · 11:12', '18 ส.ค. 69 · 06:58', '14 ส.ค. 69 · 20:04'],
+      '1y': ['12 ก.ย. 69 · 15:27', '28 ส.ค. 69 · 11:40', '3 ก.ค. 69 · 09:15', '19 พ.ค. 69 · 14:22', '14 มี.ค. 69 · 08:30', '5 ม.ค. 69 · 16:18', '22 พ.ย. 68 · 10:05', '3 ต.ค. 68 · 07:42']
+    };
+    const rawLogReadings = [
+      { asset: 'MTR-P02', device: 'มอเตอร์ปั๊มสารอาหาร', metric: 'Bearing temperature', value: '71.0 °C', status: 'critical', label: 'วิกฤต' },
+      { asset: 'MTR-P02', device: 'มอเตอร์ปั๊มสารอาหาร', metric: 'Vibration RMS', value: '6.80 mm/s', status: 'warning', label: 'เฝ้าระวัง' },
+      { asset: 'SM-04', device: 'เซ็นเซอร์ความชื้นดิน', metric: 'Soil moisture', value: '31.0 %', status: 'warning', label: 'ต่ำกว่าช่วง' },
+      { asset: 'P-01', device: 'ปั๊มน้ำหลัก', metric: 'Discharge pressure', value: '2.81 bar', status: 'normal', label: 'ปกติ' },
+      { asset: 'TMP-01', device: 'เซ็นเซอร์อุณหภูมิ', metric: 'Air temperature', value: '27.82 °C', status: 'normal', label: 'ปกติ' },
+      { asset: 'RH-01', device: 'เซ็นเซอร์ความชื้นอากาศ', metric: 'Relative humidity', value: '64.18 %RH', status: 'normal', label: 'ปกติ' },
+      { asset: 'PH-01', device: 'เซ็นเซอร์ pH', metric: 'Acidity', value: '6.18 pH', status: 'normal', label: 'ปกติ' },
+      { asset: 'FAN-01', device: 'พัดลมระบายอากาศ', metric: 'Motor speed', value: '1,182 rpm', status: 'normal', label: 'ปกติ' }
+    ];
+    let activeLogFilter = 'all';
+
+    const renderRawLogs = (period) => {
+      const tableBody = document.getElementById('raw-log-body');
+      tableBody.replaceChildren();
+      rawLogReadings.forEach((reading, index) => {
+        const row = document.createElement('tr');
+        row.setAttribute('data-log-row', '');
+        row.dataset.logStatus = reading.status;
+        [rawLogTimes[period][index], reading.asset, reading.device, reading.metric, reading.value].forEach((value) => {
+          const cell = document.createElement('td');
+          cell.textContent = value;
+          row.append(cell);
+        });
+        const statusCell = document.createElement('td');
+        const status = document.createElement('span');
+        status.className = `status ${reading.status}`;
+        status.textContent = reading.label;
+        statusCell.append(status);
+        row.append(statusCell);
+        row.hidden = activeLogFilter === 'abnormal' ? reading.status === 'normal' : activeLogFilter === 'normal' ? reading.status !== 'normal' : false;
+        tableBody.append(row);
+      });
+      document.getElementById('raw-log-scope').textContent = `ข้อมูลตัวอย่างจาก${historyData[period].label}`;
+      const visibleCount = [...tableBody.rows].filter((row) => !row.hidden).length;
+      document.getElementById('raw-log-count').textContent = `แสดงข้อมูลตัวอย่าง ${visibleCount} จาก 8 รายการ`;
+    };
+
+    document.querySelectorAll('[data-log-filter]').forEach((button) => {
+      button.addEventListener('click', () => {
+        activeLogFilter = button.dataset.logFilter;
+        document.querySelectorAll('[data-log-filter]').forEach((item) => item.classList.toggle('active', item === button));
+        const activePeriod = document.querySelector('[data-period].active').dataset.period;
+        renderRawLogs(activePeriod);
+      });
+    });
+
+    const renderHistory = (period) => {
+      const data = historyData[period];
+      const left = 42;
+      const top = 22;
+      const width = 690;
+      const height = 198;
+      historyChart.replaceChildren();
+
+      [60, 70, 80, 90, 100].forEach((score) => {
+        const y = top + ((100 - score) / 40) * height;
+        historyChart.append(createSvg('line', { x1: left, y1: y, x2: left + width, y2: y, class: 'chart-grid-line' }));
+        historyChart.append(createSvg('text', { x: 7, y: y + 4, class: 'chart-label' }, `${score}%`));
+      });
+
+      const points = data.values.map((value, index) => {
+        const x = left + (index / (data.values.length - 1)) * width;
+        const y = top + ((100 - value) / 40) * height;
+        return { x, y, value, label: data.labels[index] };
+      });
+
+      historyChart.append(createSvg('polyline', { points: points.map((point) => `${point.x},${point.y}`).join(' '), class: 'chart-line' }));
+      points.forEach((point, index) => {
+        const circle = createSvg('circle', { cx: point.x, cy: point.y, r: 4, class: 'chart-point', 'aria-label': `${point.label} ${point.value}%` });
+        if (period === '1y') circle.setAttribute('data-month-point', '');
+        historyChart.append(circle);
+        historyChart.append(createSvg('text', { x: point.x, y: 248, 'text-anchor': 'middle', class: 'chart-label' }, point.label));
+      });
+
+      if (period === '1y') {
+        [7, 11].forEach((index) => historyChart.append(createSvg('circle', { cx: points[index].x, cy: points[index].y - 13, r: 4, fill: '#b93636' })));
+      }
+      document.getElementById('history-range').textContent = data.label;
+      document.getElementById('history-health-summary').textContent = data.health;
+      document.getElementById('history-downtime').textContent = data.downtime;
+      renderRawLogs(period);
+    };
+
+    document.querySelectorAll('[data-period]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-period]').forEach((item) => item.classList.toggle('active', item === button));
+        renderHistory(button.dataset.period);
+      });
+    });
+    renderHistory('30d');
+
+    const machines = {
+      p02: { title: 'มอเตอร์ปั๊มสารอาหาร P-02', id: 'MTR-P02', status: 'ควรตรวจสอบ', level: 'critical', current: '8.7 A', vibration: '6.8 mm/s', bearing: 'อุณหภูมิลูกปืน 71°C', rpm: '1,420 rpm', pressure: '1.2 bar', hours: '4,286 h', action: 'แนะนำให้ตรวจภายใน 2 ชั่วโมง', reason: 'แรงสั่นสะเทือนและอุณหภูมิลูกปืนเพิ่มพร้อมกัน ควรตรวจแนวเพลา ลูกปืน และการอุดตันทางดูด' },
+      p01: { title: 'มอเตอร์ปั๊มน้ำหลัก P-01', id: 'MTR-P01', status: 'ปกติ', level: 'normal', current: '6.4 A', vibration: '2.1 mm/s', bearing: 'อุณหภูมิลูกปืน 48°C', rpm: '1,460 rpm', pressure: '2.8 bar', hours: '4,286 h', action: 'ยังไม่ต้องดำเนินการ', reason: 'ค่าการทำงานทั้งหมดอยู่ในช่วงปกติ งานถัดไปคือเปลี่ยนซีลตามรอบ 5,000 ชั่วโมง' },
+      fan01: { title: 'มอเตอร์พัดลม FAN-01', id: 'MTR-FAN01', status: 'ติดตาม', level: 'warning', current: '4.1 A', vibration: '4.2 mm/s', bearing: 'อุณหภูมิลูกปืน 57°C', rpm: '1,180 rpm', pressure: '—', hours: '3,936 h', action: 'แนะนำให้ตรวจภายใน 30 วัน', reason: 'แรงสั่นสะเทือนมีแนวโน้มเพิ่ม ควรตรวจความตึงและแนวศูนย์ของสายพาน' },
+      fan02: { title: 'มอเตอร์หมุนเวียน FAN-02', id: 'MTR-FAN02', status: 'ปกติ', level: 'normal', current: '2.8 A', vibration: '1.8 mm/s', bearing: 'อุณหภูมิลูกปืน 44°C', rpm: '920 rpm', pressure: '—', hours: '2,744 h', action: 'ยังไม่ต้องดำเนินการ', reason: 'ค่าการทำงานคงที่และยังไม่ถึงรอบบำรุงรักษา' }
+    };
+
+    document.querySelectorAll('[data-machine-card]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const machine = machines[button.dataset.machine];
+        document.querySelectorAll('[data-machine-card]').forEach((item) => item.classList.toggle('active', item === button));
+        document.getElementById('machine-detail-title').textContent = machine.title;
+        document.getElementById('machine-detail-id').textContent = `${machine.id} · อัปเดต 10 วินาทีที่แล้ว`;
+        const status = document.getElementById('machine-detail-status');
+        status.className = `status ${machine.level}`;
+        status.textContent = machine.status;
+        document.getElementById('machine-current').textContent = machine.current;
+        document.getElementById('machine-vibration').textContent = machine.vibration;
+        document.getElementById('machine-bearing').textContent = machine.bearing;
+        document.getElementById('machine-rpm').textContent = machine.rpm;
+        document.getElementById('machine-pressure').textContent = machine.pressure;
+        document.getElementById('machine-hours').textContent = machine.hours;
+        const recommendation = document.getElementById('machine-recommendation');
+        recommendation.className = `recommendation ${machine.level}`;
+        recommendation.querySelector('strong').textContent = machine.action;
+        recommendation.querySelector('p').textContent = machine.reason;
+      });
+    });
+
+    const maintenanceItems = [...document.querySelectorAll('[data-maintenance-item]')];
+    document.querySelectorAll('[data-maintenance-filter]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-maintenance-filter]').forEach((item) => item.classList.toggle('active', item === button));
+        maintenanceItems.forEach((item) => {
+          const filter = button.dataset.maintenanceFilter;
+          item.hidden = filter === 'required' ? item.dataset.necessity !== 'required' : filter === '30d' ? item.dataset.window === 'later' : false;
+        });
+      });
+    });
+
+    const rows = [...document.querySelectorAll('[data-device-row]')];
+    const filterButtons = [...document.querySelectorAll('[data-filter]')];
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+        filterButtons.forEach((item) => item.classList.toggle('active', item === button));
+        rows.forEach((row) => {
+          const isFault = row.dataset.status === 'critical' || row.dataset.status === 'warning';
+          row.hidden = filter === 'fault' ? !isFault : filter === 'normal' ? isFault : false;
+        });
+      });
+    });
+
+    document.querySelectorAll('.ack-button').forEach((button) => {
+      button.addEventListener('click', () => button.closest('.alert').classList.add('is-acknowledged'));
+    });
+
+    const dialog = document.getElementById('maintenance-dialog');
+    const deviceSelect = document.getElementById('device');
+    const toast = document.getElementById('toast');
+
+    document.querySelectorAll('.report-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        deviceSelect.options[0].textContent = button.dataset.device;
+        deviceSelect.options[0].value = button.dataset.device;
+        dialog.showModal();
+      });
+    });
+
+    document.getElementById('maintenance-form').addEventListener('submit', (event) => {
+      if (event.submitter?.value !== 'default') return;
+      toast.classList.add('show');
+      window.setTimeout(() => toast.classList.remove('show'), 2600);
+    });
+
+    const clock = document.getElementById('live-clock');
+    const formatter = new Intl.DateTimeFormat('th-TH', {
+      dateStyle: 'medium', timeStyle: 'medium', hour12: false, timeZone: 'Asia/Bangkok'
+    });
+    const updateClock = () => { clock.textContent = formatter.format(new Date()); };
+    updateClock();
+    window.setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
