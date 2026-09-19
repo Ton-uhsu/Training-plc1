@@ -1,5 +1,7 @@
 from collections import deque
+import csv
 from datetime import datetime
+from pathlib import Path
 import time
 import pandas as pd
 from pymodbus.client import ModbusSerialClient
@@ -10,13 +12,15 @@ from sklearn.ensemble import RandomForestRegressor
 COM_PORT = "COM6"  # ตรวจสอบพอร์ต USB-RS485
 BAUDRATE = 9600
 SLAVE_ID = 1
+REGISTER_ADDRESS = 1  # D1
+CSV_FILENAME = Path(__file__).resolve().parent / "plc_voltage_log.csv"
 M100_COIL_ADDR = 100  # Address ของ M100 เพื่อสั่งขับ Y3
 DROP_THRESHOLD = 0.15  # เกณฑ์ตัดสินแนวโน้มลดลง (เช่น ลดลงเกิน 0.15 V)
 
 # --- 2. เทรนโมเดล Random Forest จากไฟล์ CSV เดิม ---
 print(" กำลังเทรนโมเดล Random Forest จาก plc_voltage_log.csv ...")
 try:
-    df = pd.read_csv(r"C:\Prior_Work\อบรมplc\raw-code\plc_voltage_log.csv")
+    df = pd.read_csv(CSV_FILENAME)
     df["Lag_1"] = df["Voltage_V"].shift(1)
     df["Lag_2"] = df["Voltage_V"].shift(2)
     df["Lag_3"] = df["Voltage_V"].shift(3)
@@ -66,8 +70,10 @@ print("=" * 65)
 try:
     while True:
         try:
-            # อ่านค่าดิบจาก D0 (Address 0)
-            result = client.read_holding_registers(address=0, count=1)
+            # อ่านค่าดิบจาก D1 (Address 1)
+            result = client.read_holding_registers(
+                address=REGISTER_ADDRESS, count=1, device_id=SLAVE_ID
+            )
 
             if (
                 result is not None
@@ -77,6 +83,17 @@ try:
                 raw_value = result.registers[0]
                 current_v = round((raw_value / 4095.0) * 10.0, 2)
                 now_str = datetime.now().strftime("%H:%M:%S")
+
+                with CSV_FILENAME.open(
+                    mode="a", newline="", encoding="utf-8"
+                ) as file:
+                    csv.writer(file).writerow(
+                        [
+                            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            raw_value,
+                            current_v,
+                        ]
+                    )
 
                 voltage_history.append(current_v)
 

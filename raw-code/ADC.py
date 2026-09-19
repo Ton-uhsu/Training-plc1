@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+from pathlib import Path
 import time
 from pymodbus.client import ModbusSerialClient
 from pymodbus.exceptions import ModbusException
@@ -8,13 +9,14 @@ from pymodbus.exceptions import ModbusException
 COM_PORT = "COM6"  # ตรวจสอบชื่อพอร์ตใน Device Manager
 BAUDRATE = 9600  # ตรงกับ D8120
 SLAVE_ID = 1  # Station ID ของ PLC
-CSV_FILENAME = "plc_voltage_log.csv"
+REGISTER_ADDRESS = 1  # D1
+CSV_FILENAME = Path(__file__).resolve().parent / "plc_voltage_log.csv"
 
 # 1. เตรียมไฟล์ CSV
-with open(CSV_FILENAME, mode="a", newline="", encoding="utf-8") as file:
+with CSV_FILENAME.open(mode="a", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
     if file.tell() == 0:
-        writer.writerow(["Timestamp", "Raw_AD (D0)", "Voltage_V"])
+        writer.writerow(["Timestamp", "Raw_AD (D1)", "Voltage_V"])
 
 # 2. เชื่อมต่อ Serial
 try:
@@ -47,7 +49,9 @@ print("เชื่อมต่อ Serial สำเร็จ! กำลังร
 try:
     while True:
         try:
-            result = client.read_holding_registers(address=0, count=1)
+            result = client.read_holding_registers(
+                address=REGISTER_ADDRESS, count=1, device_id=SLAVE_ID
+            )
 
             if (
                 result is not None
@@ -58,13 +62,13 @@ try:
                 voltage = round((raw_value / 4095.0) * 10.0, 2)
                 now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-                with open(
-                    CSV_FILENAME, mode="a", newline="", encoding="utf-8"
+                with CSV_FILENAME.open(
+                    mode="a", newline="", encoding="utf-8"
                 ) as file:
                     writer = csv.writer(file)
                     writer.writerow([now_str, raw_value, voltage])
 
-                print(f"[{now_str}] D0: {raw_value} | แรงดัน: {voltage} V")
+                print(f"[{now_str}] D1: {raw_value} | แรงดัน: {voltage} V")
             else:
                 print(" บอร์ด PLC ไม่ตอบสนอง (กำลังรอสัญญาณ...)")
 

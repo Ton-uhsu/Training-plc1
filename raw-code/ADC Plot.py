@@ -1,6 +1,7 @@
 from collections import deque
 import csv
 from datetime import datetime
+from pathlib import Path
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 from pymodbus.client import ModbusSerialClient
@@ -10,7 +11,8 @@ from pymodbus.exceptions import ModbusException
 COM_PORT = "COM6"  # พอร์ต USB-RS485
 BAUDRATE = 9600
 SLAVE_ID = 1
-CSV_FILENAME = r"C:\Prior_Work\อบรมplc\raw-code\plc_voltage_log.csv"
+REGISTER_ADDRESS = 1  # D1
+CSV_FILENAME = Path(__file__).resolve().parent / "plc_voltage_log.csv"
 MAX_POINTS = 50  # จำนวนจุดข้อมูลที่จะแสดงบนกราฟ (ย้อนหลัง 50 จุด)
 
 # --- ตัวแปรเก็บข้อมูลสำหรับพล็อตกราฟ ---
@@ -18,10 +20,10 @@ x_data = deque(maxlen=MAX_POINTS)
 y_data = deque(maxlen=MAX_POINTS)
 
 # 1. เตรียมไฟล์ CSV
-with open(CSV_FILENAME, mode="a", newline="", encoding="utf-8") as file:
+with CSV_FILENAME.open(mode="a", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
     if file.tell() == 0:
-        writer.writerow(["Timestamp", "Raw_AD (D0)", "Voltage_V"])
+        writer.writerow(["Timestamp", "Raw_AD (D1)", "Voltage_V"])
 
 # 2. เชื่อมต่อ Serial
 try:
@@ -63,7 +65,9 @@ ax.grid(True, linestyle="--", alpha=0.6)
 # 4. ฟังก์ชันอัปเดตกราฟและบันทึกข้อมูล
 def update_plot(frame):
     try:
-        result = client.read_holding_registers(address=0, count=1)
+        result = client.read_holding_registers(
+            address=REGISTER_ADDRESS, count=1, device_id=SLAVE_ID
+        )
 
         if (
             result is not None
@@ -76,8 +80,8 @@ def update_plot(frame):
             now_full = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             # บันทึกข้อมูลลง CSV
-            with open(
-                CSV_FILENAME, mode="a", newline="", encoding="utf-8"
+            with CSV_FILENAME.open(
+                mode="a", newline="", encoding="utf-8"
             ) as file:
                 writer = csv.writer(file)
                 writer.writerow([now_full, raw_value, voltage])
@@ -94,7 +98,7 @@ def update_plot(frame):
 
             # ปรับ Title แสดงค่าปัจจุบัน
             ax.set_title(
-                f"Real-Time Voltage: {voltage:.2f} V  |  Raw AD (D0): {raw_value}",
+                f"Real-Time Voltage: {voltage:.2f} V  |  Raw AD (D1): {raw_value}",
                 fontsize=13,
                 color="#003366",
             )
