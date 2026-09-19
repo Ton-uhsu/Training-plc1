@@ -1,112 +1,112 @@
 <mxfile host="Electron">
   <diagram name="PLC Control Flow" id="SFHydroPLCFlow01">
-    <mxGraphModel dx="1600" dy="2400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="2339" math="0" shadow="0">
+    <mxGraphModel dx="2508" dy="1252" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="2339" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="SFH-001" value="ระบบจำลองสมาร์ตฟาร์มไฮโดรโปนิกส์ - ลำดับการควบคุมด้วย PLC" style="text;html=1;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#17324D;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="390" y="20" width="860" height="50" as="geometry" />
+        <mxCell id="SFH-001" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#17324D;fontFamily=Tahoma;" value="ระบบจำลองสมาร์ตฟาร์มไฮโดรโปนิกส์ - ลำดับการควบคุมด้วย PLC" vertex="1">
+          <mxGeometry height="50" width="860" x="390" y="20" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-002" value="ชุดฝึก: สวิตช์จำลอง + เซนเซอร์ Modbus RTU + หลอดไฟ 24 VDC แทนอุปกรณ์" style="text;html=1;align=center;verticalAlign=middle;fontSize=13;fontColor=#52606D;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="390" y="65" width="860" height="30" as="geometry" />
+        <mxCell id="SFH-002" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=13;fontColor=#52606D;fontFamily=Tahoma;" value="ชุดฝึก: สวิตช์จำลอง + เซนเซอร์ Modbus RTU + หลอดไฟ 24 VDC แทนอุปกรณ์" vertex="1">
+          <mxGeometry height="30" width="860" x="390" y="65" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-003" value="เปิดระบบ" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=14;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="650" y="120" width="300" height="60" as="geometry" />
+        <mxCell id="SFH-003" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=14;fontFamily=Tahoma;" value="เปิดระบบ" vertex="1">
+          <mxGeometry height="60" width="300" x="650" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-004" value="เริ่มต้นการทำงานของ PLC&lt;br&gt;ปิดเอาต์พุตควบคุมทั้งหมด" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="620" y="220" width="360" height="70" as="geometry" />
+        <mxCell id="SFH-004" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" value="เริ่มต้นการทำงานของ PLC&lt;br&gt;ปิดเอาต์พุตควบคุมทั้งหมด" vertex="1">
+          <mxGeometry height="70" width="360" x="620" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-005" value="กดปุ่มหยุดฉุกเฉิน&lt;br&gt;หรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontStyle=1;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="665" y="340" width="270" height="110" as="geometry" />
+        <mxCell id="SFH-005" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontStyle=1;fontSize=13;fontFamily=Tahoma;" value="กดปุ่มหยุดฉุกเฉิน&lt;br&gt;หรือไม่?" vertex="1">
+          <mxGeometry height="110" width="270" x="665" y="340" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-006" value="หยุดระบบฉุกเฉิน&lt;br&gt;ปิดปั๊ม วาล์ว พ่นหมอก และมอเตอร์กวน&lt;br&gt;เปิดไฟ ALARM และเสียงเตือน" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1100" y="345" width="390" height="100" as="geometry" />
+        <mxCell id="SFH-006" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" value="หยุดระบบฉุกเฉิน&lt;br&gt;ปิดปั๊ม วาล์ว พ่นหมอก และมอเตอร์กวน&lt;br&gt;เปิดไฟ ALARM และเสียงเตือน" vertex="1">
+          <mxGeometry height="100" width="390" x="1100" y="345" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-007" value="ปล่อยปุ่มฉุกเฉิน&lt;br&gt;และกด RESET แล้วหรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="500" width="270" height="110" as="geometry" />
+        <mxCell id="SFH-007" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=13;fontFamily=Tahoma;" value="ปล่อยปุ่มฉุกเฉิน&lt;br&gt;และกด RESET แล้วหรือไม่?" vertex="1">
+          <mxGeometry height="110" width="270" x="1160" y="500" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-008" value="อ่านเซนเซอร์ RS-485&lt;br&gt;อุณหภูมิ / ความชื้น / EC / pH&lt;br&gt;สื่อสารได้ปกติหรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="650" y="510" width="300" height="130" as="geometry" />
+        <mxCell id="SFH-008" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="อ่านเซนเซอร์ RS-485&lt;br&gt;อุณหภูมิ / ความชื้น / EC / pH&lt;br&gt;สื่อสารได้ปกติหรือไม่?" vertex="1">
+          <mxGeometry height="130" width="300" x="650" y="510" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-009" value="แจ้งเตือนการสื่อสารผิดปกติ&lt;br&gt;ห้ามจ่ายสารและห้ามพ่นหมอก&lt;br&gt;พัดลมทำงานในโหมดปลอดภัย" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1100" y="660" width="390" height="90" as="geometry" />
+        <mxCell id="SFH-009" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=13;fontFamily=Tahoma;" value="แจ้งเตือนการสื่อสารผิดปกติ" vertex="1">
+          <mxGeometry height="90" width="190" x="210" y="530" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-010" value="รอกดปุ่ม START&lt;br&gt;และเลือกโหมด AUTO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="650" y="700" width="300" height="70" as="geometry" />
+        <mxCell id="SFH-010" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=13;fontFamily=Tahoma;" value="รอกดปุ่ม START&lt;br&gt;และเลือกโหมด AUTO" vertex="1">
+          <mxGeometry height="70" width="300" x="650" y="700" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-011" value="ระดับน้ำต่ำกว่า&lt;br&gt;จุด LOW หรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="665" y="820" width="270" height="110" as="geometry" />
+        <mxCell id="SFH-011" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="ระดับน้ำต่ำกว่า&lt;br&gt;จุด LOW หรือไม่?" vertex="1">
+          <mxGeometry height="110" width="270" x="665" y="820" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-012" value="หยุดปั๊มหมุนเวียนและการจ่ายสาร&lt;br&gt;เปิดวาล์วเติมน้ำ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1100" y="820" width="390" height="80" as="geometry" />
+        <mxCell id="SFH-012" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" value="หยุดปั๊มหมุนเวียนและการจ่ายสาร&lt;br&gt;เปิดวาล์วเติมน้ำ" vertex="1">
+          <mxGeometry height="80" width="200" x="1185" y="780" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-013" value="น้ำถึงระดับ&lt;br&gt;HIGH หรือยัง?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="950" width="270" height="105" as="geometry" />
+        <mxCell id="SFH-013" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="น้ำถึงระดับ&lt;br&gt;HIGH หรือยัง?" vertex="1">
+          <mxGeometry height="105" width="270" x="1150" y="895" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-014" value="เติมน้ำเกินเวลา&lt;br&gt;ที่กำหนดหรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="1100" width="270" height="100" as="geometry" />
+        <mxCell id="SFH-014" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="เติมน้ำเกินเวลา&lt;br&gt;ที่กำหนดหรือไม่?" vertex="1">
+          <mxGeometry height="100" width="270" x="1150" y="1045" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-015" value="ปิดวาล์วเติมน้ำ&lt;br&gt;แจ้งเตือนเติมน้ำเกินเวลา" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1110" y="1240" width="370" height="75" as="geometry" />
+        <mxCell id="SFH-015" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" value="ปิดวาล์วเติมน้ำ&lt;br&gt;แจ้งเตือนเติมน้ำเกินเวลา" vertex="1">
+          <mxGeometry height="75" width="220" x="1175" y="1175" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-016" value="เปิดปั๊มหมุนเวียน&lt;br&gt;ตามรอบเวลา AUTO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="620" y="1000" width="360" height="75" as="geometry" />
+        <mxCell id="SFH-016" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" value="เปิดปั๊มหมุนเวียน&lt;br&gt;ตามรอบเวลา AUTO" vertex="1">
+          <mxGeometry height="75" width="360" x="620" y="1000" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-017" value="ตรวจพบน้ำไหล&lt;br&gt;ภายในเวลาที่กำหนดหรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="665" y="1120" width="270" height="110" as="geometry" />
+        <mxCell id="SFH-017" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="ตรวจพบน้ำไหล&lt;br&gt;ภายในเวลาที่กำหนดหรือไม่?" vertex="1">
+          <mxGeometry height="110" width="270" x="665" y="1120" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-018" value="หยุดปั๊มหมุนเวียน&lt;br&gt;แจ้งเตือนไม่พบน้ำไหล" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="120" y="1140" width="370" height="75" as="geometry" />
+        <mxCell id="SFH-018" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" value="หยุดปั๊มหมุนเวียน&lt;br&gt;แจ้งเตือนไม่พบน้ำไหล" vertex="1">
+          <mxGeometry height="75" width="370" x="120" y="1140" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-019" value="ประเมินอุณหภูมิ&lt;br&gt;และความชื้น" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="620" y="1280" width="360" height="75" as="geometry" />
+        <mxCell id="SFH-019" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=13;fontFamily=Tahoma;" value="ประเมินอุณหภูมิ&lt;br&gt;และความชื้น" vertex="1">
+          <mxGeometry height="75" width="360" x="620" y="1280" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-020" value="อุณหภูมิสูง หรือความชื้นสูง&lt;br&gt;เปิดพัดลมระบายอากาศ&lt;br&gt;ใช้ Hysteresis ก่อนสั่งปิด" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="120" y="1400" width="420" height="90" as="geometry" />
+        <mxCell id="SFH-020" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=13;fontFamily=Tahoma;" value="อุณหภูมิสูง หรือความชื้นสูง&lt;br&gt;เปิดพัดลมระบายอากาศ&lt;br&gt;ใช้ Hysteresis ก่อนสั่งปิด" vertex="1">
+          <mxGeometry height="90" width="420" x="120" y="1400" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-021" value="อุณหภูมิสูง และความชื้นไม่สูงเกิน&lt;br&gt;เปิดระบบพ่นหมอก&lt;br&gt;หากความชื้นสูงให้บังคับปิด" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1060" y="1400" width="430" height="90" as="geometry" />
+        <mxCell id="SFH-021" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=13;fontFamily=Tahoma;" value="อุณหภูมิสูง และความชื้นไม่สูงเกิน&lt;br&gt;เปิดระบบพ่นหมอก&lt;br&gt;หากความชื้นสูงให้บังคับปิด" vertex="1">
+          <mxGeometry height="90" width="430" x="1060" y="1400" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-022" value="ค่า EC ต่ำกว่า&lt;br&gt;ค่าที่ตั้งหรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="665" y="1430" width="270" height="105" as="geometry" />
+        <mxCell id="SFH-022" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="ค่า EC ต่ำกว่า&lt;br&gt;ค่าที่ตั้งหรือไม่?" vertex="1">
+          <mxGeometry height="105" width="270" x="665" y="1430" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-023" value="เปิดมอเตอร์กวน&lt;br&gt;จ่ายปุ๋ย A แล้วจ่ายปุ๋ย B&lt;br&gt;ห้ามปั๊ม A และ B ทำงานพร้อมกัน&lt;br&gt;กวน รอ แล้วอ่านค่า EC ใหม่" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="620" y="1590" width="360" height="110" as="geometry" />
+        <mxCell id="SFH-023" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" value="เปิดมอเตอร์กวน&lt;br&gt;จ่ายปุ๋ย A แล้วจ่ายปุ๋ย B&lt;br&gt;ห้ามปั๊ม A และ B ทำงานพร้อมกัน&lt;br&gt;กวน รอ แล้วอ่านค่า EC ใหม่" vertex="1">
+          <mxGeometry height="110" width="360" x="620" y="1590" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-024" value="จ่ายสารหรือวนซ้ำ&lt;br&gt;เกินขีดจำกัดหรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1060" y="1590" width="280" height="110" as="geometry" />
+        <mxCell id="SFH-024" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="จ่ายสารหรือวนซ้ำ&lt;br&gt;เกินขีดจำกัดหรือไม่?" vertex="1">
+          <mxGeometry height="110" width="280" x="1135" y="1590" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-025" value="หยุดจ่ายปุ๋ย&lt;br&gt;แจ้งเตือนควบคุม EC ผิดปกติ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1100" y="1750" width="360" height="75" as="geometry" />
+        <mxCell id="SFH-025" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" value="หยุดจ่ายปุ๋ย&lt;br&gt;แจ้งเตือนควบคุม EC ผิดปกติ" vertex="1">
+          <mxGeometry height="75" width="225" x="1162.5" y="1750" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-026" value="ค่า pH อยู่นอก&lt;br&gt;ช่วงที่กำหนดหรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="665" y="1760" width="270" height="110" as="geometry" />
+        <mxCell id="SFH-026" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="ค่า pH อยู่นอก&lt;br&gt;ช่วงที่กำหนดหรือไม่?" vertex="1">
+          <mxGeometry height="110" width="270" x="665" y="1760" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-027" value="pH ต่ำ: จ่าย pH Up เป็นช่วงสั้น&lt;br&gt;pH สูง: จ่าย pH Down เป็นช่วงสั้น&lt;br&gt;ห้ามปั๊มทั้งสองทำงานพร้อมกัน&lt;br&gt;กวน รอ แล้วอ่านค่า pH ใหม่" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="620" y="1920" width="360" height="110" as="geometry" />
+        <mxCell id="SFH-027" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;fontFamily=Tahoma;" value="pH ต่ำ: จ่าย pH Up เป็นช่วงสั้น&lt;br&gt;pH สูง: จ่าย pH Down เป็นช่วงสั้น&lt;br&gt;ห้ามปั๊มทั้งสองทำงานพร้อมกัน&lt;br&gt;กวน รอ แล้วอ่านค่า pH ใหม่" vertex="1">
+          <mxGeometry height="110" width="360" x="620" y="1920" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-028" value="จ่ายสารหรือวนซ้ำ&lt;br&gt;เกินขีดจำกัดหรือไม่?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1060" y="1920" width="280" height="110" as="geometry" />
+        <mxCell id="SFH-028" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=13;fontFamily=Tahoma;" value="จ่ายสารหรือวนซ้ำ&lt;br&gt;เกินขีดจำกัดหรือไม่?" vertex="1">
+          <mxGeometry height="110" width="280" x="1140" y="1920" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-029" value="หยุดจ่ายสารปรับ pH&lt;br&gt;แจ้งเตือนควบคุม pH ผิดปกติ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="1100" y="2070" width="360" height="75" as="geometry" />
+        <mxCell id="SFH-029" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontStyle=1;fontSize=13;fontFamily=Tahoma;" value="หยุดจ่ายสารปรับ pH&lt;br&gt;แจ้งเตือนควบคุม pH ผิดปกติ" vertex="1">
+          <mxGeometry height="75" width="360" x="1100" y="2070" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-030" value="อัปเดตไฟ RUN / ALARM&lt;br&gt;แล้วเริ่มรอบสแกนถัดไป" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=13;fontFamily=Tahoma;" vertex="1" parent="1">
-          <mxGeometry x="620" y="2100" width="360" height="75" as="geometry" />
+        <mxCell id="SFH-030" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;fontSize=13;fontFamily=Tahoma;" value="อัปเดตไฟ RUN / ALARM&lt;br&gt;แล้วเริ่มรอบสแกนถัดไป" vertex="1">
+          <mxGeometry height="75" width="360" x="620" y="2100" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-031" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-003" target="SFH-004">
+        <mxCell id="SFH-031" edge="1" parent="1" source="SFH-003" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;" target="SFH-004">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-032" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-004" target="SFH-005">
+        <mxCell id="SFH-032" edge="1" parent="1" source="SFH-004" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-005">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-033" value="ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-005" target="SFH-006">
+        <mxCell id="SFH-033" edge="1" parent="1" source="SFH-005" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-006" value="ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-034" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-006" target="SFH-007">
+        <mxCell id="SFH-034" edge="1" parent="1" source="SFH-006" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-007">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-035" value="ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-007" target="SFH-004">
+        <mxCell id="SFH-035" edge="1" parent="1" source="SFH-007" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-004" value="ใช่">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1510" y="555" />
@@ -114,94 +114,89 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="SFH-036" value="ไม่ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-005" target="SFH-008">
+        <mxCell id="SFH-036" edge="1" parent="1" source="SFH-005" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-008" value="ไม่ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-037" value="ไม่ปกติ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-008" target="SFH-009">
+        <mxCell id="SFH-037" edge="1" parent="1" source="SFH-008" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-009" value="ไม่ปกติ">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-038" value="ปกติ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-008" target="SFH-010">
+        <mxCell id="SFH-038" edge="1" parent="1" source="SFH-008" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-010" value="ปกติ">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-039" value="RESET / ลองใหม่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-009" target="SFH-008">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1030" y="705" />
-              <mxPoint x="1030" y="575" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SFH-040" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-010" target="SFH-011">
+        <mxCell id="SFH-040" edge="1" parent="1" source="SFH-010" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-011">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-041" value="ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-011" target="SFH-012">
+        <mxCell id="SFH-041" edge="1" parent="1" source="SFH-011" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-012" value="ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-042" value="ไม่ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-011" target="SFH-016">
+        <mxCell id="SFH-042" edge="1" parent="1" source="SFH-011" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-016" value="ไม่ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-043" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-012" target="SFH-013">
+        <mxCell id="SFH-043" edge="1" parent="1" source="SFH-012" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-013">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-044" value="ถึง HIGH: ปิดวาล์ว" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-013" target="SFH-016">
+        <mxCell id="SFH-044" edge="1" parent="1" source="SFH-013" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-016" value="ถึง HIGH: ปิดวาล์ว">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-045" value="ยังไม่ถึง" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-013" target="SFH-014">
+        <mxCell id="SFH-045" edge="1" parent="1" source="SFH-013" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-014" value="ยังไม่ถึง">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-046" value="ไม่ใช่: เติมต่อ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-014" target="SFH-013">
+        <mxCell id="SFH-046" edge="1" parent="1" source="SFH-014" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-013" value="ไม่ใช่: เติมต่อ">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-047" value="ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-014" target="SFH-015">
+        <mxCell id="SFH-047" edge="1" parent="1" source="SFH-014" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-015" value="ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-048" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-016" target="SFH-017">
+        <mxCell id="SFH-048" edge="1" parent="1" source="SFH-016" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-017">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-049" value="ไม่พบ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-017" target="SFH-018">
+        <mxCell id="SFH-049" edge="1" parent="1" source="SFH-017" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-018" value="ไม่พบ">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-050" value="พบ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-017" target="SFH-019">
+        <mxCell id="SFH-050" edge="1" parent="1" source="SFH-017" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-019" value="พบ">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-051" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-019" target="SFH-020">
+        <mxCell id="SFH-051" edge="1" parent="1" source="SFH-019" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-020">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-052" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-019" target="SFH-021">
+        <mxCell id="SFH-052" edge="1" parent="1" source="SFH-019" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-021">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-053" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-019" target="SFH-022">
+        <mxCell id="SFH-053" edge="1" parent="1" source="SFH-019" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-022">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-054" value="ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-022" target="SFH-023">
+        <mxCell id="SFH-054" edge="1" parent="1" source="SFH-022" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-023" value="ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-055" value="ไม่ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-022" target="SFH-026">
-          <mxGeometry relative="1" as="geometry">
+        <mxCell id="SFH-055" edge="1" parent="1" source="SFH-022" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#FF3333;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-026" value="ไม่ใช่">
+          <mxGeometry relative="1" x="-0.3814" as="geometry">
+            <mxPoint as="offset" />
             <Array as="points">
               <mxPoint x="560" y="1483" />
-              <mxPoint x="560" y="1815" />
+              <mxPoint x="560" y="1730" />
+              <mxPoint x="800" y="1730" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="SFH-056" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-023" target="SFH-024">
+        <mxCell id="SFH-056" edge="1" parent="1" source="SFH-023" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-024">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-057" value="ไม่ใช่: อ่าน EC ใหม่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-024" target="SFH-022">
+        <mxCell id="SFH-057" edge="1" parent="1" source="SFH-024" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-022" value="ไม่ใช่: อ่าน EC ใหม่">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1010" y="1645" />
+              <mxPoint x="1275" y="1570" />
+              <mxPoint x="1010" y="1570" />
               <mxPoint x="1010" y="1483" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="SFH-058" value="ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-024" target="SFH-025">
+        <mxCell id="SFH-058" edge="1" parent="1" source="SFH-024" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-025" value="ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-059" value="ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-026" target="SFH-027">
+        <mxCell id="SFH-059" edge="1" parent="1" source="SFH-026" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-027" value="ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-060" value="ไม่ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-026" target="SFH-030">
+        <mxCell id="SFH-060" edge="1" parent="1" source="SFH-026" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#82B366;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="SFH-030" value="ไม่ใช่">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="560" y="1815" />
@@ -209,24 +204,27 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="SFH-061" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-027" target="SFH-028">
+        <mxCell id="SFH-061" edge="1" parent="1" source="SFH-027" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" target="SFH-028">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-062" value="ไม่ใช่: อ่าน pH ใหม่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-028" target="SFH-026">
-          <mxGeometry relative="1" as="geometry">
+        <mxCell id="SFH-062" edge="1" parent="1" source="SFH-028" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontFamily=Tahoma;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="SFH-026" value="ไม่ใช่: อ่าน pH ใหม่">
+          <mxGeometry relative="1" x="-0.3514" as="geometry">
+            <mxPoint as="offset" />
             <Array as="points">
-              <mxPoint x="1010" y="1975" />
+              <mxPoint x="1280" y="1890" />
+              <mxPoint x="1010" y="1890" />
               <mxPoint x="1010" y="1815" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="SFH-063" value="ใช่" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-028" target="SFH-029">
+        <mxCell id="SFH-063" edge="1" parent="1" source="SFH-028" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#B85450;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" target="SFH-029" value="ใช่">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="SFH-064" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#6C8EBF;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;" edge="1" parent="1" source="SFH-030" target="SFH-005">
+        <mxCell id="SFH-064" edge="1" parent="1" source="SFH-030" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#6C8EBF;fontStyle=1;fontFamily=Tahoma;endArrow=block;endFill=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;" target="SFH-005" value="">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="70" y="2138" />
+              <mxPoint x="610" y="2156" />
+              <mxPoint x="70" y="2156" />
               <mxPoint x="70" y="395" />
             </Array>
           </mxGeometry>
